@@ -35,11 +35,11 @@ export default function RootLayout({
       signInFallbackRedirectUrl="/dashboard"
       signUpFallbackRedirectUrl="/dashboard"
     >
-      <html lang="en">
+      <html lang="en" className="dark">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <header className="flex justify-between items-center p-4 gap-4 h-16 bg-green-200 border-b border-green-300">
+          <header className="flex justify-between items-center p-4 gap-4 h-16 bg-card border-b border-border">
             <div>
               <h1 className="text-2xl font-bold">Link Shortener</h1>
             </div>
