@@ -48,12 +48,12 @@ export default function RootLayout({
                 {/* ✅ 添加 mode="modal" 以啟用模態框 */}
                 <SignInButton mode="modal">
                   <button className="bg-[#6c47ff] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer hover:bg-[#5739cc] transition-colors">
-                    Sign In
+                    簽到
                   </button>
                 </SignInButton>
                 <SignUpButton mode="modal">
                   <button className="bg-[#6c47ff] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer hover:bg-[#5739cc] transition-colors">
-                    Sign Up
+                    註冊
                   </button>
                 </SignUpButton>
               </SignedOut>
