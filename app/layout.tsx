@@ -7,6 +7,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import { shadcn } from "@clerk/themes";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import "./globals.css";
@@ -33,6 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider
+      appearance={{ baseTheme: shadcn }}
       signInFallbackRedirectUrl="/dashboard"
       signUpFallbackRedirectUrl="/dashboard"
     >
