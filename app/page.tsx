@@ -3,7 +3,13 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { SignUpButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link2, Zap, BarChart3, Shield, Globe, Users } from "lucide-react";
 
@@ -37,18 +43,12 @@ export default async function Home(): Promise<JSX.Element> {
           <br />
           專為現代網路設計的強大工具。
         </p>
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <SignUpButton mode="modal">
-            <Button size="lg" className="text-lg">
-              <Zap className="mr-2 size-5" />
-              免費開始使用
-            </Button>
-          </SignUpButton>
-          <Button size="lg" variant="outline" className="text-lg">
-            <BarChart3 className="mr-2 size-5" />
-            查看功能
+        <SignUpButton mode="modal">
+          <Button size="lg" className="text-lg">
+            <Zap className="mr-2 size-5" />
+            免費開始使用
           </Button>
-        </div>
+        </SignUpButton>
       </section>
 
       {/* Features Section */}
