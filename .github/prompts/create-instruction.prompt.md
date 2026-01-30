@@ -2,5 +2,6 @@
 agent: Instructions Generator
 ---
 
-Take the information below and generate an agent instruction .md file for it in the subdirctory /docs. If the .md file already exists, use it, otherwise create a approxpriate filename based on the generated content. Make sure the instruction are concise and Not too long. Make sure to update AGENTS.md file to this new docs file.
-If no information is provided below, Prompt the user to give necessary details about the layer of architecture or coding standard to document. Add comments by using Traditional Chinese to explain your reasoning where appropriate.
+請根據以下資訊在 /docs 子目錄中產生一個代理指令 .md 檔案。如果 .md 檔案已存在，請使用它；否則，請根據生成的內容建立一個適當的檔案名稱。請確保指令簡潔明了，不要過長。請務必將 AGENTS.md 檔案更新為這個新的 docs 檔案。
+
+如果下方未提供任何訊息，請提示使用者提供必要的架構層或編碼標準資訊以進行文件化。請在適當的地方使用繁體中文添加註釋，解釋您的理由。
