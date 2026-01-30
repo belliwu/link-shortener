@@ -11,7 +11,35 @@
 
 ## 📋 身份驗證要求
 
-### 1. Clerk 配置
+### 1. Clerk 配置與主題
+
+#### 主題設定
+
+本專案使用 `@clerk/themes` 套件中的 `shadcn` 主題，以確保 Clerk 元件與 shadcn/ui 設計系統保持一致。
+
+```typescript
+// ✅ app/layout.tsx - 套用 shadcn 主題
+import { ClerkProvider } from "@clerk/nextjs";
+import { shadcn } from "@clerk/themes";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <ClerkProvider appearance={{ baseTheme: shadcn }}>
+      <html lang="en">
+        <body>{children}</body>
+      </html>
+    </ClerkProvider>
+  );
+}
+```
+
+> **重要**：所有 Clerk 元件（登入/註冊模態框、UserButton 等）都會自動套用 shadcn 主題。
+
+#### Proxy 配置
 
 > **注意**：Next.js 16 使用 `proxy.ts` 取代了 `middleware.ts` 慣例。
 > 詳見：[Next.js Proxy 文件](https://nextjs.org/docs/messages/middleware-to-proxy)
@@ -291,6 +319,17 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
 NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
 ```
+
+### 4. 套件依賴
+
+確保安裝必要的 Clerk 套件：
+
+```bash
+npm install @clerk/nextjs @clerk/themes
+```
+
+- `@clerk/nextjs` - Clerk 的 Next.js 整合
+- `@clerk/themes` - 預建的 Clerk UI 主題（包含 shadcn 主題）
 
 ## 🚫 禁止事項
 
