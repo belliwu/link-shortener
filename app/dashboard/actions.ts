@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 
-import { createLinkInDb } from "@/data/links";
+import { createLinkInDb, updateLinkInDb, deleteLinkInDb } from "@/data/links";
 import { Link } from "@/db/schema";
 
 /**
@@ -103,6 +103,144 @@ export async function createLink(
     return {
       success: false,
       error: "建立連結時發生錯誤，請稍後再試",
+    };
+  }
+}
+
+/**
+ * Zod schema for validating update link input
+ */
+const updateLinkSchema = z.object({
+  id: z.number(),
+  url: z.string().url("必須是有效的 URL"),
+  customCode: z
+    .string()
+    .min(3, "自訂短碼至少需要 3 個字元")
+    .max(20, "自訂短碼最多 20 個字元")
+    .regex(/^[a-zA-Z0-9_-]+$/, "自訂短碼只能包含英文字母、數字、底線和連字號")
+    .optional()
+    .or(z.literal("")),
+});
+
+/**
+ * TypeScript type inferred from Zod schema
+ */
+type UpdateLinkInput = z.infer<typeof updateLinkSchema>;
+
+/**
+ * 更新現有的連結
+ * @param input - 包含連結 ID、原始 URL 和可選自訂短碼的物件
+ * @returns ActionResponse 包含更新的連結或錯誤訊息
+ */
+export async function updateLink(
+  input: UpdateLinkInput,
+): Promise<ActionResponse<Link>> {
+  // 1️⃣ 檢查使用者身份驗證
+  const { userId } = await auth();
+
+  if (!userId) {
+    return {
+      success: false,
+      error: "未授權：請先登入",
+    };
+  }
+
+  // 2️⃣ 驗證輸入資料
+  const validation = updateLinkSchema.safeParse(input);
+
+  if (!validation.success) {
+    return {
+      success: false,
+      error: `驗證失敗：${validation.error.issues[0].message}`,
+    };
+  }
+
+  const { id, url, customCode } = validation.data;
+
+  // 3️⃣ 執行資料庫操作
+  try {
+    const link = await updateLinkInDb(
+      id,
+      {
+        originalUrl: url,
+        shortCode: customCode && customCode.length > 0 ? customCode : undefined,
+      },
+      userId,
+    );
+
+    if (!link) {
+      return {
+        success: false,
+        error: "找不到連結或無權限更新",
+      };
+    }
+
+    // 重新驗證 dashboard 頁面
+    revalidatePath("/dashboard");
+
+    return {
+      success: true,
+      data: link,
+    };
+  } catch (error) {
+    console.error("更新連結失敗:", error);
+
+    // 檢查是否為重複的短碼錯誤
+    if (error instanceof Error && error.message.includes("unique")) {
+      return {
+        success: false,
+        error: "此自訂短碼已被使用，請選擇其他短碼",
+      };
+    }
+
+    return {
+      success: false,
+      error: "更新連結時發生錯誤，請稍後再試",
+    };
+  }
+}
+
+/**
+ * 刪除連結
+ * @param linkId - 要刪除的連結 ID
+ * @returns ActionResponse 包含成功訊息或錯誤訊息
+ */
+export async function deleteLink(
+  linkId: number,
+): Promise<ActionResponse<void>> {
+  // 1️⃣ 檢查使用者身份驗證
+  const { userId } = await auth();
+
+  if (!userId) {
+    return {
+      success: false,
+      error: "未授權：請先登入",
+    };
+  }
+
+  // 2️⃣ 執行資料庫操作
+  try {
+    const deleted = await deleteLinkInDb(linkId, userId);
+
+    if (!deleted) {
+      return {
+        success: false,
+        error: "找不到連結或無權限刪除",
+      };
+    }
+
+    // 重新驗證 dashboard 頁面
+    revalidatePath("/dashboard");
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("刪除連結失敗:", error);
+
+    return {
+      success: false,
+      error: "刪除連結時發生錯誤，請稍後再試",
     };
   }
 }

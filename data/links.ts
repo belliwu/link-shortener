@@ -61,3 +61,54 @@ export async function createLinkInDb(data: {
 
   return link;
 }
+
+/**
+ * 在資料庫中更新連結
+ * @param linkId - 連結 ID
+ * @param data - 要更新的資料
+ * @param userId - 使用者 ID（用於權限檢查）
+ * @returns 更新後的連結，如果找不到或無權限則返回 null
+ */
+export async function updateLinkInDb(
+  linkId: number,
+  data: { originalUrl?: string; shortCode?: string },
+  userId: string,
+): Promise<Link | null> {
+  const [updated] = await db
+    .update(links)
+    .set(data)
+    .where(eq(links.id, linkId))
+    .returning();
+
+  // 檢查是否屬於該使用者
+  if (updated && updated.userId !== userId) {
+    return null;
+  }
+
+  return updated || null;
+}
+
+/**
+ * 從資料庫中刪除連結
+ * @param linkId - 要刪除的連結 ID
+ * @param userId - 使用者 ID（用於權限檢查）
+ * @returns 刪除成功返回 true，找不到或無權限返回 false
+ */
+export async function deleteLinkInDb(
+  linkId: number,
+  userId: string,
+): Promise<boolean> {
+  // 先檢查連結是否存在且屬於該使用者
+  const [existingLink] = await db
+    .select()
+    .from(links)
+    .where(eq(links.id, linkId));
+
+  if (!existingLink || existingLink.userId !== userId) {
+    return false;
+  }
+
+  await db.delete(links).where(eq(links.id, linkId));
+
+  return true;
+}

@@ -2,6 +2,8 @@ import { JSX } from "react";
 
 import { getCurrentUserLinks } from "@/data/links";
 import { CreateLinkDialog } from "./components/create-link-dialog";
+import { EditLinkDialog } from "./components/edit-link-dialog";
+import { DeleteLinkDialog } from "./components/delete-link-dialog";
 
 export default async function DashboardPage(): Promise<JSX.Element> {
   const userLinks = await getCurrentUserLinks();
@@ -24,16 +26,22 @@ export default async function DashboardPage(): Promise<JSX.Element> {
         <ul className="space-y-3">
           {userLinks.map((link) => (
             <li key={link.id} className="rounded-md border p-4">
-              <div className="flex flex-col gap-1">
-                <span className="text-sm font-medium">
-                  短碼：{link.shortCode}
-                </span>
-                <span className="break-all text-sm text-muted-foreground">
-                  {link.originalUrl}
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  建立時間：{link.createdAt.toLocaleString("zh-TW")}
-                </span>
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm font-medium">
+                    短碼：{link.shortCode}
+                  </span>
+                  <span className="break-all text-sm text-muted-foreground">
+                    {link.originalUrl}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    建立時間：{link.createdAt.toLocaleString("zh-TW")}
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <EditLinkDialog link={link} />
+                  <DeleteLinkDialog link={link} />
+                </div>
               </div>
             </li>
           ))}
