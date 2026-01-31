@@ -26,8 +26,8 @@ export default async function DashboardPage(): Promise<JSX.Element> {
         <ul className="space-y-3">
           {userLinks.map((link) => (
             <li key={link.id} className="rounded-md border p-4">
-              <div className="flex flex-col gap-3">
-                <div className="flex flex-col gap-1">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-1 flex-1 min-w-0">
                   <span className="text-sm font-medium">
                     短碼：{link.shortCode}
                   </span>
@@ -38,7 +38,7 @@ export default async function DashboardPage(): Promise<JSX.Element> {
                     建立時間：{link.createdAt.toLocaleString("zh-TW")}
                   </span>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 shrink-0">
                   <EditLinkDialog link={link} />
                   <DeleteLinkDialog link={link} />
                 </div>

@@ -112,3 +112,19 @@ export async function deleteLinkInDb(
 
   return true;
 }
+
+/**
+ * 根據短碼查詢連結
+ * @param shortCode - 短碼
+ * @returns 找到的連結，如果不存在則返回 null
+ */
+export async function getLinkByShortCode(
+  shortCode: string,
+): Promise<Link | null> {
+  const [link] = await db
+    .select()
+    .from(links)
+    .where(eq(links.shortCode, shortCode));
+
+  return link || null;
+}
