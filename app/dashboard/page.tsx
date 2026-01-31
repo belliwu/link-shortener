@@ -1,9 +1,52 @@
 import { JSX } from "react";
 
-export default function DashboardPage(): JSX.Element {
+import { getCurrentUserLinks } from "@/data/links";
+import { CreateLinkDialog } from "./components/create-link-dialog";
+import { EditLinkDialog } from "./components/edit-link-dialog";
+import { DeleteLinkDialog } from "./components/delete-link-dialog";
+
+export default async function DashboardPage(): Promise<JSX.Element> {
+  const userLinks = await getCurrentUserLinks();
+
   return (
-    <div>
-      <h1>Dashboard</h1>
+    <div className="mx-auto max-w-4xl space-y-6 px-6 py-4 sm:px-8 lg:px-12">
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold text-yellow-600">Dashboard</h1>
+          <p className="text-sm text-muted-foreground">你的連結</p>
+        </div>
+        <CreateLinkDialog />
+      </header>
+
+      {userLinks.length === 0 ? (
+        <div className="rounded-md border border-dashed p-6 text-sm text-muted-foreground">
+          尚未建立任何連結。
+        </div>
+      ) : (
+        <ul className="space-y-3">
+          {userLinks.map((link) => (
+            <li key={link.id} className="rounded-md border p-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-1 flex-1 min-w-0">
+                  <span className="text-sm font-medium">
+                    短碼：{link.shortCode}
+                  </span>
+                  <span className="break-all text-sm text-muted-foreground">
+                    {link.originalUrl}
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    建立時間：{link.createdAt.toLocaleString("zh-TW")}
+                  </span>
+                </div>
+                <div className="flex gap-2 shrink-0">
+                  <EditLinkDialog link={link} />
+                  <DeleteLinkDialog link={link} />
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

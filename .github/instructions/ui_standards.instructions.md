@@ -1,3 +1,7 @@
+---
+description: Read this document before implementing UI components in the Link Shortener project using shadcn/ui.
+---
+
 # UI 元件標準（UI Component Standards）
 
 本文件定義了 Link Shortener 專案中使用 shadcn/ui 建構使用者介面的標準和最佳實踐。
