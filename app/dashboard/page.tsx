@@ -1,15 +1,19 @@
 import { JSX } from "react";
 
 import { getCurrentUserLinks } from "@/data/links";
+import { CreateLinkDialog } from "./components/create-link-dialog";
 
 export default async function DashboardPage(): Promise<JSX.Element> {
   const userLinks = await getCurrentUserLinks();
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-6 py-4 sm:px-8 lg:px-12">
-      <header className="space-y-1 text-center">
-        <h1 className="text-2xl font-semibold text-yellow-600">Dashboard</h1>
-        <p className="text-sm text-muted-foreground">你的連結</p>
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-semibold text-yellow-600">Dashboard</h1>
+          <p className="text-sm text-muted-foreground">你的連結</p>
+        </div>
+        <CreateLinkDialog />
       </header>
 
       {userLinks.length === 0 ? (
