@@ -1,3 +1,7 @@
+---
+description: Read this document before implementing authentication in the Link Shortener project.
+---
+
 # 身份驗證標準（Authentication Standards）
 
 本文件定義了 Link Shortener 專案中使用 Clerk 進行身份驗證和授權的標準和最佳實踐。
